@@ -4,7 +4,7 @@ $(function() {
   app = {
 //TODO: The current 'addFriend' function just adds the class 'friend'
 //to all messages sent by the user
-    server: 'https://api.parse.com/1/classes/chatterbox/',
+    server: 'http://127.0.0.1:3000/classes/messages',
     username: 'anonymous',
     roomname: 'lobby',
     lastMessageId: 0,
@@ -27,14 +27,14 @@ $(function() {
       app.$roomSelect.on('change', app.saveRoom);
 
       // Fetch previous messages
-      app.startSpinner();
+      //app.startSpinner();
       app.fetch(false);
 
       // Poll for new messages
       setInterval(app.fetch, 3000);
     },
     send: function(data) {
-      app.startSpinner();
+      //app.startSpinner();
       // Clear messages input
       app.$message.val('');
 
@@ -62,8 +62,8 @@ $(function() {
         data: { order: '-createdAt'},
         success: function(data) {
           console.log('chatterbox: Messages fetched');
-
-          // Don't bother if we have nothing to work with
+          // Don't bother if we have nothing to work 
+          // data = JSON.parse(data);
           if (!data.results || !data.results.length) { return; }
 
           // Get the last message
@@ -71,7 +71,7 @@ $(function() {
           var displayedRoom = $('.chat span').first().data('roomname');
           app.stopSpinner();
           // Only bother updating the DOM if we have a new message
-          if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
+          // if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
             // Update the UI with the fetched rooms
             app.populateRooms(data.results);
 
@@ -80,7 +80,7 @@ $(function() {
 
             // Store the ID of the most recent message
             app.lastMessageId = mostRecentMessage.objectId;
-          }
+          // }
         },
         error: function(data) {
           console.error('chatterbox: Failed to fetch messages');
@@ -92,7 +92,7 @@ $(function() {
     },
     populateMessages: function(results, animate) {
       // Clear existing messages
-
+      console.log('populating the messages...');
       app.clearMessages();
       app.stopSpinner();
       if (Array.isArray(results)) {
@@ -112,7 +112,7 @@ $(function() {
       }
     },
     populateRooms: function(results) {
-      app.$roomSelect.html('<option value="__newRoom">New room...</option><option value="" selected>Lobby</option></select>');
+      app.$roomSelect.html('<option value="__newRoom">New room...</option></select>');
 
       if (results) {
         var rooms = {};
